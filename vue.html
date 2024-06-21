@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Loading Animation</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <div class="loading-page">
+        <div v-if="loading">
+          <div class="counter">
+            <p v-model="message">{{ message }}</p>
+            <h1>{{ c }}%</h1>
+            <hr :style="{ width: c + '%' }" />
+
+            <hr />
+          </div>
+        </div>
+
+        <div v-else>done!</div>
+      </div>
+    </div>
+
+    <script setup>
+      const { createApp, ref, onMounted } = Vue;
+
+      const setup = () => {
+        const message = ref("Loading...");
+
+        const loading = ref(true);
+
+        const counter = ref(0);
+        const c = ref(0);
+
+        onMounted(() => {
+          const i = setInterval(() => {
+            counter.value++;
+            c.value++;
+
+            if (counter.value == 100) {
+              clearInterval(i);
+              loading.value = false;
+              message.value = "Welcome!";
+            }
+          }, 50);
+        });
+
+        return {
+          message,
+          c,
+          loading,
+        };
+      };
+      Vue.createApp({ setup }).mount("#app");
+    </script>
+  </body>
+</html>
